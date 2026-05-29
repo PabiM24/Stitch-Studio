@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frequently Asked Questions</title>
+
+    <style>
+        body {
+            background-color: #f5f0e8;
+            background-image: repeating-linear-gradient(
+                135deg,
+                transparent,
+                transparent 40px,
+                rgba(90, 122, 58, 0.04) 40px,
+                rgba(90, 122, 58, 0.04) 80px
+            );
+            font-family: Arial, sans-serif;
+            color: black;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: #5a7a3a;
+            padding: 15px 30px;
+            border-bottom: 4px solid #2d5016;
+            box-shadow: 0 3px 8px rgba(45, 80, 22, 0.2);
+        }
+
+        .link {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            justify-content: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-family: Arial, sans-serif;
+            margin-right: 20px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        main:empty {
+            display: none;
+        }
+
+        h1 {
+            color: #2d5016;
+            font-family: Arial, sans-serif;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            text-align: center;
+            text-transform: uppercase;
+            margin: 40px 20px 10px 20px;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid #c8d8b0;
+            width: 80%;
+            margin: 10px auto 30px auto;
+        }
+
+        h2 {
+            font-family: Arial, sans-serif;
+            font-size: 1rem;
+            color: white;
+            background-color: #5a7a3a;
+            margin: 12px 20px 0 20px;
+            padding: 16px 20px;
+            border-radius: 12px 12px 0 0;
+            border-left: 5px solid #2d5016;
+            cursor: default;
+        }
+
+        h2 + p {
+            font-family: Arial, sans-serif;
+            color: black;
+            background-color: white;
+            margin: 0 20px 6px 20px;
+            padding: 14px 20px;
+            border-radius: 0 0 12px 12px;
+            border-left: 5px solid #c8d8b0;
+            line-height: 1.7;
+            box-shadow: 0 4px 10px rgba(90, 122, 58, 0.08);
+        }
+
+        footer {
+            background-color: #2d5016;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-top: 4px solid #5a7a3a;
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            margin-top: 40px;
+        }
+
+        footer p {
+            color: white;
+            margin: 0;
+        }
+
+        footer hr {
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            margin-bottom: 12px;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 12px 15px;
+            }
+
+            nav a {
+                font-size: 0.85rem;
+                margin-right: 8px;
+            }
+
+            h1 {
+                font-size: 1.4rem;
+                margin: 25px 15px 10px 15px;
+            }
+
+            h2 {
+                font-size: 0.95rem;
+                margin: 10px 12px 0 12px;
+                padding: 14px 16px;
+            }
+
+            h2 + p {
+                margin: 0 12px 5px 12px;
+                padding: 12px 16px;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav a {
+                font-size: 0.8rem;
+                margin-right: 5px;
+            }
+
+            h1 {
+                font-size: 1.1rem;
+                letter-spacing: 1px;
+            }
+
+            h2 {
+                margin: 8px 8px 0 8px;
+                padding: 12px 14px;
+            }
+
+            h2 + p {
+                margin: 0 8px 4px 8px;
+                padding: 10px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <ul class="nav link">
+            <a href="index.html">Home</a>
+            <a href="about.html">About us</a>
+            <a href="products.html">Products</a>
+            <a href="contact.html">Contact Us</a>
+            <a href="faq.html">faq</a>
+        </ul>
+    </nav>
+    <main class="FAQ container"></main>
+
+    <h1>Frequently Asked Questions</h1>
+
+    <hr>
+    <h2>What material do you use?</h2>
+    <p>We use high quality yarns and cotton depending on your design needs.</p>
+
+    <h2>Is there a physical store where i can try items on?</h2>
+    <p>Currently, we only operate online. This allows us to focus on providing the best online shopping experience. <br>
+    However, we are planning to open a physical store in the near future.</p>
+
+    <h2>Can i cancel my order?</h2>
+    <p>Cancellations are accepted within 24-hours of placing an order. Once we recieve your cancellation request, we will process your refund. <br>
+    After 24 hours, cancellations are not accepted.</p>
+
+    <h2>Do you offer custom designs?</h2>
+    <p>Yes, we offer custom design services to create unique pieces that reflect your personal style. Please contact us <br>
+    to provide any relevant images or descriptions.</p>
+
+    <h2>What is your return policy?</h2>
+    <p>Due to items being made to order, we usually do not accept returns. However if there is a flaw in your product, please, <br>
+    contact us within 48 hours of delivery so that we can resolve the issue.</p>
+
+    <h2>What payment methods do you accept?</h2>
+    <p>We accept EFT payments and secure online payments. Your order can only be confirmed once the payment is recieved.</p>
+
+    <h2>How do i take care of my crotchet pieces?</h2>
+    <p>To keep your items in a perfect condition, we recommend washing in cold water. Do not hand them as this might stretch the yarn.</p>
+
+    <h2>Are your items see through?</h2>
+    <p>When crocheting we use tight stitching patterns to ensure that our items are not see through. However, for certain designs, we recommend wearing something underneath.</p>
+
+
+    </div>
+
+    <footer>
+        <hr>
+        <p><center>&copy; 2026 Studio Stitch. All rights reserved. </center></p>
+    </footer>
+</body>
+</html>

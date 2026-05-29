@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+
+    <style>
+        body {
+            background-color: #f5f0e8;
+            font-family: Arial, sans-serif;
+            color: black;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: #5a7a3a;
+            padding: 15px 30px;
+            border-bottom: 4px solid #2d5016;
+            box-shadow: 0 3px 8px rgba(45, 80, 22, 0.2);
+        }
+
+        .links {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            justify-content: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-family: Arial, sans-serif;
+            margin-right: 20px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        h1 {
+            color: #2d5016;
+            font-family: Arial, sans-serif;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            text-align: center;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        .container > p {
+            text-align: center;
+            color: #5a7a3a;
+            font-style: italic;
+            width: 100%;
+            margin-top: 0;
+        }
+
+        h3 {
+            color: #2d5016;
+            font-family: Arial, sans-serif;
+            font-size: 1.2rem;
+            border-left: 4px solid #5a7a3a;
+            padding-left: 10px;
+            margin-top: 0;
+        }
+
+        p {
+            color: black;
+            font-family: Arial, sans-serif;
+            line-height: 1.7;
+        }
+
+        .form {
+            background-color: white;
+            border-radius: 16px;
+            border-top: 4px solid #5a7a3a;
+            padding: 30px;
+            box-shadow: 0 4px 16px rgba(90, 122, 58, 0.12);
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .form li {
+            list-style: none;
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            color: #2d5016;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #c8d8b0;
+            border-radius: 10px;
+            font-family: Arial, sans-serif;
+            font-size: 0.95rem;
+            color: black;
+            background-color: #fafaf7;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        textarea:focus {
+            border-color: #5a7a3a;
+            outline: none;
+        }
+
+        textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            background-color: #5a7a3a;
+            color: white;
+            padding: 12px 28px;
+            border: 2px solid #2d5016;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-family: Arial, sans-serif;
+            width: 100%;
+            transition: background-color 0.3s ease;
+            margin-top: 5px;
+            box-shadow: 0 4px 10px rgba(45, 80, 22, 0.2);
+        }
+
+        .btn:hover {
+            background-color: #2d5016;
+        }
+
+        div.info:empty {
+            display: none;
+        }
+
+        form:empty, section:empty {
+            display: none;
+        }
+
+        .info {
+            background-color: white;
+            border-radius: 16px;
+            border-top: 4px solid #2d5016;
+            padding: 30px;
+            box-shadow: 0 4px 16px rgba(90, 122, 58, 0.12);
+            flex: 1;
+            min-width: 240px;
+        }
+
+        .info p {
+            color: black;
+            font-family: Arial, sans-serif;
+            font-size: 0.95rem;
+            margin-bottom: 14px;
+            padding: 10px 14px;
+            background-color: #f5f0e8;
+            border-radius: 10px;
+            border-left: 3px solid #5a7a3a;
+        }
+
+        footer {
+            background-color: #2d5016;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-top: 4px solid #5a7a3a;
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            margin-top: 20px;
+        }
+
+        footer p {
+            color: white;
+            margin: 0;
+        }
+
+        footer hr {
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            margin-bottom: 12px;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 12px 15px;
+            }
+
+            nav a {
+                font-size: 0.85rem;
+                margin-right: 8px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .container {
+                flex-direction: column;
+                margin: 20px auto;
+                padding: 0 15px;
+                gap: 20px;
+            }
+
+            .form, .info {
+                min-width: unset;
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.2rem;
+                letter-spacing: 1px;
+            }
+
+            .btn {
+                font-size: 0.9rem;
+                padding: 10px 20px;
+            }
+
+            nav a {
+                font-size: 0.8rem;
+                margin-right: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <ul class="nav links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="products.html">Products</a>
+            <a href="contact.html">Contact us</a>
+            <a href="faq.html">Faq</a>
+        </ul>
+    </nav>
+
+    <main class="contact container">
+            <h1>Get in Touch</h1>
+            <p>Have questions about out handmade crotchet pieces? Reach out to us below.</p>
+            
+            <section class="contact"></section>
+            <form class="contact form"></form>
+            <li><label for="surname">Surname</label>
+            <input type="text" id="surname" name="surname" required> </li>
+
+            <li><label for="name">Name</label>
+            <input type="text" id="name" name="name" required> </li>
+            
+            <li><label for="email">Email</label>
+            <input type="email" id="email" name="email" required></li>
+            
+            <li><label for="message">Message</label>
+            <textarea  id="message" row 5 required>Message</textarea>
+            
+            <button type="submit" class="btn">Send the Message</button>
+            </form>
+            
+            <div class="contact info"></div>
+            <h3>Contact Details</h3>
+            
+            <p><strong>Email:</strong>stitchstudio@yahoo.com</p>
+            
+            <p><strong>Phone:</strong>0762849289</p>
+            
+            <p><strong>Hours:</strong>Mon Fri: 09:00-18:00</p>
+        </main>
+        </ul>
+    </nav>
+    <footer>
+        <hr>
+        <p><center>&copy; 2026 Studio Stitch. All rights reserved. </center></p>
+    </footer>
+</body>
+</html>

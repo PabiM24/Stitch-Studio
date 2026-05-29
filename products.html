@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Studio Stitch</title>
+
+    <style>
+        
+        body {
+            background-color: #f5f0e8;
+            background-image:
+                repeating-linear-gradient(
+                    135deg,
+                    transparent,
+                    transparent 40px,
+                    rgba(90, 122, 58, 0.04) 40px,
+                    rgba(90, 122, 58, 0.04) 80px
+                );
+            font-family: Arial, sans-serif;
+            color: black;
+            margin: 0;
+            padding: 0;
+        }
+
+        
+        nav {
+            background-color: #5a7a3a;
+            padding: 15px 30px;
+            border-bottom: 4px solid #2d5016;
+            box-shadow: 0 4px 10px rgba(45, 80, 22, 0.25);
+        }
+
+        
+        .links {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-family: Arial, sans-serif;
+            margin-right: 20px;
+        }
+
+        
+        h1 {
+            color: #2d5016;
+            font-family: Arial, sans-serif;
+            font-size: 2.4rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        
+        p {
+            color: #5a7a3a;
+            font-family: Arial, sans-serif;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        
+        hr {
+            border: none;
+            border-top: 2px solid #c8d8b0;
+        }
+
+        
+        center:first-of-type {
+            background-color: white;
+            padding: 40px 20px 20px 20px;
+            border-bottom: 3px solid #c8d8b0;
+            margin-bottom: 10px;
+        }
+
+        
+        table img {
+            border-radius: 14px;
+            box-shadow: 0 6px 18px rgba(45, 80, 22, 0.18);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: block;
+            margin: 0 auto;
+        }
+
+        
+        table img:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 28px rgba(45, 80, 22, 0.25);
+        }
+
+        
+        table td {
+            background-color: white;
+            border-radius: 16px;
+            border-top: 4px solid #5a7a3a;
+            padding: 24px 16px;
+            vertical-align: top;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(90, 122, 58, 0.12);
+            transition: box-shadow 0.3s ease;
+        }
+
+        
+        table td:hover {
+            box-shadow: 0 8px 24px rgba(45, 80, 22, 0.2);
+        }
+
+        
+        table b {
+            color: #2d5016;
+            font-family: Arial, sans-serif;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        
+        center:last-of-type {
+            background-color: #2d5016;
+            color: white;
+            padding: 25px 20px;
+            margin-top: 30px;
+            border-top: 4px solid #5a7a3a;
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        
+        center:last-of-type hr {
+            border-top: 1px solid rgba(255,255,255,0.3);
+            margin-bottom: 12px;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #c8d8b0;
+            border-radius: 10px;
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+            color: #2d5016;
+            background-color: #f5f0e8;
+            margin-top: 10px;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+
+        select:focus {
+            border-color: #5a7a3a;
+            outline: none;
+        }
+
+        .cart-btn {
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px 0;
+            background-color: #2d5016;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .cart-btn:hover {
+            background-color: #5a7a3a;
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 12px 15px;
+            }
+
+            .links {
+                gap: 4px;
+            }
+
+            nav a {
+                font-size: 0.85rem;
+                margin-right: 8px;
+            }
+
+            h1 {
+                font-size: 1.4rem;
+                letter-spacing: 1px;
+            }
+
+            table {
+                width: 100% !important;
+            }
+
+            table tr {
+                display: block;
+            }
+
+            table td {
+                display: block;
+                width: 90% !important;
+                margin: 10px auto;
+                box-sizing: border-box;
+            }
+
+            table img {
+                width: 100% !important;
+                height: auto !important;
+                max-width: 320px;
+            }
+
+            center:first-of-type {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+        <nav class="navbar">
+
+    <ul class="nav links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="products.html">Products</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="faq.html">Faq</a>
+    </ul>
+
+    </nav>
+        </td>
+      </tr>
+    </table>
+
+<br><br>
+<center>
+<h1><b>Our Handcrafted Collection</h1></b><br>
+<p><i>Crafted for comfort and style</i></p>
+    <br><br>
+    <hr width="80%">
+</center>
+<br>
+
+<table width="95%" border="0" align="center" cellpadding="20" cellspacing="0">
+
+    <tr>
+        <td width="33%" align="center" valign="top">
+            <img src="assets/serene maxi dress.jpg" alt="Serene Maxi" width="280">
+            <br><br>
+            <b>The Serene Maxi dress</b><br>
+            An elegant, floor-length gown featuring a modern keyhole design.<br><br>
+            <b>R1 250.00</b><br>
+            <select><option>Select Size</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>3XL</option><option>4XL</option></select>
+            <button class="cart-btn">Add to Cart</button>
+        </td>
+        <td width="33%" align="center" valign="top">
+            <img src="assets/Willow wing dress.jpg" alt="Willow Wing Mini" width="280" border="0">
+            <br><br>
+            <b>Willow Wing Mini</b><br>
+            Soft sage green dress with flutter sleeves and floral accents.<br><br>
+            <b>R850.00</b><br>
+            <select><option>Select Size</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>3XL</option><option>4XL</option></select>
+            <button class="cart-btn">Add to Cart</button>
+        </td>
+        <td width="33%" align="center" valign="top">
+            <img src="assets/Emerald mini.jpg" alt="Emerald mini" width="280" border="0">
+            <br><br>
+            <b>The Emerald Mini</b><br>
+            Handcrafted with a dramatic ruffled hem in a rich moss tone.<br><br>
+            <b>R850.00</b><br>
+            <select><option>Select Size</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>3XL</option><option>4XL</option></select>
+            <button class="cart-btn">Add to Cart</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="33%" align="center" valign="top">
+            <img src="assets/pure stitch 2 piece.jpg" alt=" Pure Stitch Co-ord" width="280" border="0">
+            <br><br>
+            <b>Pure Stitch Co-ord</b><br>
+            Two-piece halter top and fringed skirt set made from premium yarn.<br><br>
+            <b>R1 100.00</b><br>
+            <select><option>Select Size</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>3XL</option><option>4XL</option></select>
+            <button class="cart-btn">Add to Cart</button>
+        </td>
+        <td width="33%" align="center" valign="top">
+            <img src="assets/Glacial distressed sweater.jpg" alt="Glacial distressed" width="280" border="0">
+            <br><br>
+            <b>Glacial distressed sweater</b><br>
+            Hand-stitched mesh design for a modern, breathable men's fit.<br><br>
+            <b>R650.00</b><br>
+            <select><option>Select Size</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>3XL</option><option>4XL</option></select>
+            <button class="cart-btn">Add to Cart</button>
+        </td>
+        <td width="33%" align="center" valign="top">
+            <img src="assets/Charcoal brushstroke sweater men.jpg" alt="Brush stroke Sweater" width="280" border="0">
+            <br><br>
+            <b>Charcoal Brushstroke Sweater</b><br>
+            Artistic abstract brushstroke patterns on a high-quality knit<br><br>
+            <b>R780.00</b><br>
+            <select><option>Select Size</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>3XL</option><option>4XL</option></select>
+            <button class="cart-btn">Add to Cart</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td width="33%" align="center" valign="top">
+            <img src="assets/Sky blue Shell bag.jpg" alt="Sky blue shell bag" width="280" border="0">
+            <br><br>
+            <b>Sky shell bag</b><br>
+            Light blue crochet tote featuring natural wooden handles.<br><br>
+            <b>R550.00</b><br>
+            <select><option>Select Size</option><option>Small</option><option>Medium</option><option>Large</option></select>
+            <button class="cart-btn">Add to Cart</button>
+        </td>
+        <td width="33%" align="center" valign="top">
+            <img src="assets/charcoal classic.jpg" alt="Charcoal classic" width="280" border="0">
+            <br><br>
+            <b>The Charcoal classic</b><br>
+            Sleek charcoal bag with a modern metallic chain accent.<br><br>
+            <b>R480.00</b><br>
+            <select><option>Select Size</option><option>Small</option><option>Medium</option><option>Large</option></select>
+            <button class="cart-btn">Add to Cart</button>
+        </td>
+        <td width="33%" align="center" valign="top">
+            <img src="assets/Ivory ribbon tote bag.jpg" alt="Ivory tote bag" width="280" border="0">
+            <br><br>
+            <b>Ivory ribbon tote bag</b><br>
+            Functional and stylish tote bag<br><br>
+            <b>R650.00</b><br>
+            <select><option>Select Size</option><option>Small</option><option>Medium</option><option>Large</option></select>
+            <button class="cart-btn">Add to Cart</button>
+        </td>
+    </tr>
+
+</table>
+
+<br><br>
+
+<center>
+    <hr width="80%">
+    
+    &copy; 2026 Studio Stitch. All rights reserved.<br>
+
+</center>
+<br>
+
+</body>
+</html>
