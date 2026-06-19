@@ -1357,3 +1357,294 @@ footer p {
   }
   .cat-tab { flex-shrink: 0; }
 }
+
+/* =========================================
+   HAMBURGER SUB-MENU (Products → categories)
+   ========================================= */
+.nav-dropdown-item {
+  position: relative;
+}
+
+.nav-dropdown-item > a::after {
+  content: ' ›';
+  opacity: 0.6;
+  font-size: 0.8em;
+}
+
+.nav-sub-menu {
+  display: flex;
+  flex-direction: column;
+  background: rgba(0,0,0,0.12);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.nav-dropdown-item.open .nav-sub-menu {
+  max-height: 300px;
+}
+
+.nav-sub-menu a {
+  font-size: 0.8rem;
+  padding: 0.65rem 2.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  opacity: 0.92;
+}
+
+.nav-sub-menu a:hover {
+  padding-left: 3rem;
+  background: rgba(255,255,255,0.1);
+}
+
+/* On desktop (wide screens), reveal sub-menu on hover for a more native feel */
+@media (min-width: 769px) {
+  .nav-dropdown-item:hover .nav-sub-menu {
+    max-height: 300px;
+  }
+}
+
+/* =========================================
+   PAYMENT MODAL
+   ========================================= */
+#payment-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(44,44,44,0.45);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition);
+  z-index: 999;
+  padding: 1rem;
+}
+
+#payment-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.payment-modal {
+  background: var(--clr-surface);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-soft);
+  padding-bottom: 1.5rem;
+}
+
+.payment-total {
+  text-align: center;
+  font-size: 1.3rem;
+  font-family: var(--font-display);
+  color: var(--clr-text);
+  margin: 1rem 1.75rem 0.25rem;
+}
+
+.payment-total strong { color: var(--clr-green-dk); }
+
+.payment-note {
+  text-align: center;
+  font-size: 0.85rem;
+  margin: 0 1.75rem 1.25rem;
+}
+
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 0 1.5rem;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  text-align: left;
+  background: var(--clr-bg);
+  border: 2px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.2rem;
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition), transform var(--transition);
+}
+
+.payment-option:hover {
+  border-color: var(--clr-green);
+  background: var(--clr-green-lt);
+  transform: translateY(-2px);
+}
+
+.payment-icon { font-size: 1.6rem; flex-shrink: 0; }
+
+.payment-label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--clr-text);
+  display: block;
+}
+
+.payment-desc {
+  font-size: 0.78rem;
+  color: var(--clr-muted);
+  display: block;
+}
+
+.payment-options .payment-option {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+}
+.payment-options .payment-icon { grid-row: 1 / 3; }
+
+.payment-modal .delivery-note {
+  margin-top: 1.25rem;
+  padding: 0 1.5rem;
+}
+
+/* =========================================
+   INTERACTIVE DELIVERY MAP
+   ========================================= */
+#delivery-map-section {
+  max-width: var(--max-width);
+  margin: 3rem auto;
+  padding: 3rem 2rem;
+  text-align: center;
+  background: var(--clr-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+#delivery-map-section h2 { margin-bottom: 0.6rem; }
+
+.map-intro {
+  max-width: 560px;
+  margin: 0 auto 2rem;
+  font-size: 0.95rem;
+}
+
+.map-wrapper {
+  position: relative;
+  max-width: 420px;
+  margin: 0 auto 1.25rem;
+}
+
+#sa-map {
+  width: 100%;
+  height: auto;
+}
+
+#sa-map .province path {
+  fill: var(--clr-green-lt);
+  stroke: var(--clr-surface);
+  stroke-width: 3;
+  cursor: pointer;
+  transition: fill var(--transition), transform var(--transition);
+  transform-origin: center;
+}
+
+#sa-map .province:hover path {
+  fill: var(--clr-green);
+}
+
+#sa-map .province.active path {
+  fill: var(--clr-green-dk);
+}
+
+#map-tooltip {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--clr-green-dk);
+  font-size: 1rem;
+  min-height: 1.5em;
+}
+
+/* =========================================
+   GALLERY LIGHTBOX
+   ========================================= */
+#lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20,20,20,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition);
+  z-index: 1000;
+  padding: 2rem;
+}
+
+#lightbox-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+#lightbox-img {
+  max-width: 80vw;
+  max-height: 78vh;
+  border-radius: var(--radius-md);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+#lightbox-caption {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--clr-white);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  text-align: center;
+  background: rgba(0,0,0,0.4);
+  padding: 0.5rem 1.5rem;
+  border-radius: var(--radius-pill);
+}
+
+#lightbox-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: var(--clr-white);
+  font-size: 1.2rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+#lightbox-close:hover { background: rgba(255,255,255,0.3); }
+
+#lightbox-prev,
+#lightbox-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: var(--clr-white);
+  font-size: 1.8rem;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+#lightbox-prev { left: 1.5rem; }
+#lightbox-next { right: 1.5rem; }
+#lightbox-prev:hover,
+#lightbox-next:hover { background: rgba(255,255,255,0.3); }
+
+@media (max-width: 600px) {
+  .payment-modal { max-width: 100%; }
+  #lightbox-prev, #lightbox-next { width: 40px; height: 40px; font-size: 1.4rem; }
+  #lightbox-close { width: 36px; height: 36px; font-size: 1rem; }
+}

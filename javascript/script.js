@@ -73,9 +73,25 @@ function initHamburger() {
   dropdown.className = 'nav-dropdown';
   if (ul) {
     const links = Array.from(ul.querySelectorAll('a'));
-    dropdown.innerHTML = links.map(a =>
-      `<a href="${a.href}">${a.textContent}</a>`
-    ).join('');
+    dropdown.innerHTML = links.map(a => {
+      /* Add a Products sub-menu with category shortcuts */
+      const isProductsLink = a.href.toLowerCase().includes('products.html') &&
+                              !a.href.toLowerCase().includes('?cat=');
+      if (isProductsLink) {
+        return `
+          <div class="nav-dropdown-item has-sub">
+            <a href="${a.href}">${a.textContent}</a>
+            <div class="nav-sub-menu">
+              <a href="products.html?cat=dresses">👗 Dresses</a>
+              <a href="products.html?cat=coords">✿ Co-ords</a>
+              <a href="products.html?cat=sweaters">🧶 Sweaters</a>
+              <a href="products.html?cat=bags">👜 Bags</a>
+              <a href="products.html?cat=accessories">🎀 Accessories</a>
+            </div>
+          </div>`;
+      }
+      return `<a href="${a.href}">${a.textContent}</a>`;
+    }).join('');
     ul.remove();
   }
 
@@ -88,17 +104,28 @@ function initHamburger() {
 
   /* Close on outside click */
   document.addEventListener('click', (e) => {
-    if (!wrapper.contains(e.target)) {
+    if (!wrapper.contains(e.target) && !dropdown.contains(e.target)) {
       burger.classList.remove('open');
       dropdown.classList.remove('open');
     }
   });
 
-  /* Close on link click */
+  /* Close on link click (including sub-menu links) */
   dropdown.querySelectorAll('a').forEach(a => {
     a.addEventListener('click', () => {
       burger.classList.remove('open');
       dropdown.classList.remove('open');
+    });
+  });
+
+  /* Tap-to-expand sub-menu on touch/mobile (in addition to hover on desktop via CSS) */
+  dropdown.querySelectorAll('.has-sub').forEach(item => {
+    const parentLink = item.querySelector('a');
+    parentLink.addEventListener('click', (e) => {
+      if (window.innerWidth <= 768) {
+        e.preventDefault();
+        item.classList.toggle('open');
+      }
     });
   });
 
@@ -176,6 +203,8 @@ function initSearch() {
   function showAllProducts() {
     getProductCells().forEach(td => td.style.display = '');
     document.querySelectorAll('table tr').forEach(tr => tr.style.display = '');
+    document.querySelectorAll('.section-label').forEach(label => label.style.display = '');
+    document.querySelectorAll('table').forEach(t => t.style.display = '');
     hideNoResults();
   }
 
@@ -254,21 +283,17 @@ function initCategoryTabs() {
   const table = document.querySelector('table');
   if (!table) return;
 
-  /* Tag each product cell with a category based on keywords in its text */
-  const cells = Array.from(document.querySelectorAll('td[width="33%"], td[align="center"]'))
+  /* Use existing data-category attributes from the HTML (dresses, coords, sweaters, bags, accessories).
+     Cells can have multiple space-separated values e.g. "dresses new-in" — normalize to the primary category. */
+  const cells = Array.from(document.querySelectorAll('table td[width="33%"], table td[align="center"]'))
     .filter(td => td.querySelector('img'));
 
+  const CATS = ['dresses', 'coords', 'sweaters', 'bags', 'accessories'];
+
   cells.forEach(td => {
-    const text = td.innerText.toLowerCase();
-    if (text.includes('dress') || text.includes('maxi') || text.includes('gown') || text.includes('mini') || text.includes('skirt') || text.includes('co-ord')) {
-      td.dataset.category = 'dresses';
-    } else if (text.includes('sweater') || text.includes('knit') || text.includes('brushstroke') || text.includes('glacial') || text.includes('charcoal') || text.includes('distressed')) {
-      td.dataset.category = 'sweaters';
-    } else if (text.includes('bag') || text.includes('tote') || text.includes('shell') || text.includes('ribbon') || text.includes('classic')) {
-      td.dataset.category = 'bags';
-    } else {
-      td.dataset.category = 'other';
-    }
+    const raw = (td.dataset.category || '').toLowerCase();
+    const primary = CATS.find(c => raw.includes(c)) || 'other';
+    td.dataset.category = primary;
   });
 
   /* Build tabs UI */
@@ -277,15 +302,16 @@ function initCategoryTabs() {
   tabsWrapper.innerHTML = `
     <button class="cat-tab active" data-cat="all">✦ All</button>
     <button class="cat-tab" data-cat="dresses">👗 Dresses</button>
+    <button class="cat-tab" data-cat="coords">✿ Co-ords</button>
     <button class="cat-tab" data-cat="sweaters">🧶 Sweaters</button>
-    <button class="cat-tab" data-cat="bags">👜 Bags</button>`;
+    <button class="cat-tab" data-cat="bags">👜 Bags</button>
+    <button class="cat-tab" data-cat="accessories">🎀 Accessories</button>`;
 
   table.parentNode.insertBefore(tabsWrapper, table);
 
   /* Filter function */
   function filterByCategory(cat) {
     cells.forEach(td => {
-      const row = td.closest('tr');
       td.style.display = (cat === 'all' || td.dataset.category === cat) ? '' : 'none';
     });
 
@@ -295,6 +321,16 @@ function initCategoryTabs() {
         .filter(td => td.style.display !== 'none' && td.querySelector('img'));
       tr.style.display = visible.length === 0 ? 'none' : '';
     });
+
+    /* Hide empty section labels (the heading divs above each category table) */
+    document.querySelectorAll('.section-label').forEach(label => {
+      const sectionTable = label.nextElementSibling;
+      if (!sectionTable || sectionTable.tagName !== 'TABLE') return;
+      const visibleRows = Array.from(sectionTable.querySelectorAll('tr'))
+        .filter(tr => tr.style.display !== 'none');
+      label.style.display = visibleRows.length === 0 ? 'none' : '';
+      sectionTable.style.display = visibleRows.length === 0 ? 'none' : '';
+    });
   }
 
   /* Wire tab clicks */
@@ -303,8 +339,25 @@ function initCategoryTabs() {
       tabsWrapper.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       filterByCategory(btn.dataset.cat);
+      /* Reflect selection in the URL without reloading, so it's shareable/bookmarkable */
+      const url = new URL(window.location);
+      if (btn.dataset.cat === 'all') url.searchParams.delete('cat');
+      else url.searchParams.set('cat', btn.dataset.cat);
+      window.history.replaceState({}, '', url);
     });
   });
+
+  /* If arriving from a hamburger dropdown link like products.html?cat=bags, pre-select that tab */
+  const params = new URLSearchParams(window.location.search);
+  const catParam = params.get('cat');
+  if (catParam && CATS.includes(catParam)) {
+    const targetBtn = tabsWrapper.querySelector(`.cat-tab[data-cat="${catParam}"]`);
+    if (targetBtn) {
+      tabsWrapper.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
+      targetBtn.classList.add('active');
+      filterByCategory(catParam);
+    }
+  }
 }
 
 /* =========================================
@@ -468,8 +521,97 @@ function clearCart() {
   saveCart(); updateBubble(); renderCartItems();
 }
 
+/* =========================================
+   CHECKOUT — PAYMENT OPTIONS MODAL
+   ========================================= */
 function checkout() {
-  alert('Thank you for shopping with Stitch Studio! 🛒✨\nWe will be in touch to confirm your order and payment details.\n\nEmail us at: maluleke.paballo@yahoo.com');
+  if (cart.length === 0) return;
+  closeCartModal();
+
+  let overlay = document.getElementById('payment-overlay');
+  if (!overlay) {
+    overlay         = document.createElement('div');
+    overlay.id      = 'payment-overlay';
+    overlay.onclick = e => { if (e.target === overlay) closePaymentModal(); };
+    document.body.appendChild(overlay);
+  }
+
+  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const total    = subtotal + DELIVERY;
+
+  overlay.innerHTML = `
+    <div class="payment-modal">
+      <div class="cart-modal-header">
+        <h2>✦ Payment Options</h2>
+        <button class="cart-close" onclick="closePaymentModal()">✕</button>
+      </div>
+      <p class="payment-total">Order Total: <strong>R${total.toFixed(2)}</strong></p>
+      <p class="payment-note">Choose how you'd like to pay. We will confirm your order by email before processing.</p>
+
+      <div class="payment-options">
+        <button class="payment-option" onclick="selectPayment('EFT')">
+          <span class="payment-icon">🏦</span>
+          <span class="payment-label">EFT / Bank Transfer</span>
+          <span class="payment-desc">Pay directly into our account. Order ships once payment reflects.</span>
+        </button>
+        <button class="payment-option" onclick="selectPayment('Card')">
+          <span class="payment-icon">💳</span>
+          <span class="payment-label">Card Payment</span>
+          <span class="payment-desc">Secure online payment via card (link sent by email).</span>
+        </button>
+        <button class="payment-option" onclick="selectPayment('SnapScan')">
+          <span class="payment-icon">📱</span>
+          <span class="payment-label">SnapScan / Instant EFT</span>
+          <span class="payment-desc">Fast, secure mobile payment option.</span>
+        </button>
+      </div>
+
+      <p class="delivery-note">✦ We deliver across South Africa only · R${DELIVERY.toFixed(2)} delivery fee included above</p>
+    </div>`;
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePaymentModal() {
+  const overlay = document.getElementById('payment-overlay');
+  if (overlay) { overlay.classList.remove('open'); document.body.style.overflow = ''; }
+}
+
+function selectPayment(method) {
+  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const total    = subtotal + DELIVERY;
+  const orderSummary = cart.map(i => `${i.qty}x ${i.name} (${i.size}) - R${(i.price * i.qty).toFixed(2)}`).join('\n');
+
+  const subject = encodeURIComponent('New Order - Stitch Studio');
+  const body    = encodeURIComponent(
+    `Order Summary:\n${orderSummary}\n\n` +
+    `Subtotal: R${subtotal.toFixed(2)}\n` +
+    `Delivery (SA): R${DELIVERY.toFixed(2)}\n` +
+    `Total: R${total.toFixed(2)}\n\n` +
+    `Preferred payment method: ${method}\n\n` +
+    `---\nPlease confirm my order and send payment details.`
+  );
+
+  const link        = document.createElement('a');
+  link.href         = `mailto:pabeeraps@gmail.com?subject=${subject}&body=${body}`;
+  link.style.display = 'none';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  closePaymentModal();
+  clearCart();
+
+  let toast = document.getElementById('cart-toast');
+  if (!toast) {
+    toast    = document.createElement('div');
+    toast.id = 'cart-toast';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = `✦ Order sent! We'll confirm payment details by email shortly.`;
+  toast.classList.add('show');
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(() => toast.classList.remove('show'), 4000);
 }
 
 /* =========================================
@@ -542,7 +684,7 @@ function initContactForm() {
     );
 
     const link        = document.createElement('a');
-    link.href         = `mailto:maluleke.paballo@yahoo.com?subject=${subject}&body=${body}`;
+    link.href         = `mailto:pabeeraps@gmail.com?subject=${subject}&body=${body}`;
     link.style.display = 'none';
     document.body.appendChild(link);
     link.click();
@@ -565,14 +707,167 @@ function initContactForm() {
 }
 
 /* =========================================
+   INTERACTIVE DELIVERY MAP — Home & About
+   ========================================= */
+function initDeliveryMap() {
+  if (!PAGE.isHome && !PAGE.isAbout) return;
+  if (document.getElementById('delivery-map-section')) return;
+
+  const section = document.createElement('section');
+  section.id = 'delivery-map-section';
+  section.innerHTML = `
+    <h2>✦ Where We Deliver</h2>
+    <p class="map-intro">Stitch Studio ships handcrafted pieces to every province in South Africa. Tap a province to see it highlighted.</p>
+    <div class="map-wrapper">
+      <svg id="sa-map" viewBox="0 0 600 520" xmlns="http://www.w3.org/2000/svg">
+        <g class="province" data-name="Western Cape">
+          <path d="M60,400 L220,380 L240,460 L100,490 Z"/>
+        </g>
+        <g class="province" data-name="Northern Cape">
+          <path d="M60,400 L220,380 L260,180 L80,200 Z"/>
+        </g>
+        <g class="province" data-name="Eastern Cape">
+          <path d="M220,380 L240,460 L420,440 L380,330 Z"/>
+        </g>
+        <g class="province" data-name="Free State">
+          <path d="M260,180 L380,200 L370,300 L240,300 Z"/>
+        </g>
+        <g class="province" data-name="KwaZulu-Natal">
+          <path d="M380,200 L470,210 L460,340 L370,300 Z"/>
+        </g>
+        <g class="province" data-name="North West">
+          <path d="M260,180 L300,80 L400,90 L380,200 Z"/>
+        </g>
+        <g class="province" data-name="Gauteng">
+          <path d="M300,80 L360,70 L370,120 L320,130 Z"/>
+        </g>
+        <g class="province" data-name="Mpumalanga">
+          <path d="M370,120 L460,110 L470,210 L380,200 Z"/>
+        </g>
+        <g class="province" data-name="Limpopo">
+          <path d="M320,40 L470,30 L460,110 L370,120 Z"/>
+        </g>
+      </svg>
+      <div id="map-tooltip">Tap a province ✦</div>
+    </div>
+    <p class="delivery-note">🚚 Flat-rate delivery of R${DELIVERY.toFixed(2)} anywhere in South Africa</p>`;
+
+  /* Insert after hero / overview section depending on page */
+  const anchor = document.querySelector('.summary, .overview, main') || document.body;
+  anchor.parentNode ? anchor.insertAdjacentElement('afterend', section) : document.body.appendChild(section);
+
+  const tooltip = section.querySelector('#map-tooltip');
+  section.querySelectorAll('.province').forEach(p => {
+    p.addEventListener('click', () => {
+      section.querySelectorAll('.province').forEach(o => o.classList.remove('active'));
+      p.classList.add('active');
+      tooltip.textContent = `✦ We deliver to ${p.dataset.name}`;
+    });
+  });
+}
+
+/* =========================================
+   GALLERY LIGHTBOX — Products page
+   ========================================= */
+function initGalleryLightbox() {
+  if (!PAGE.isProducts) return;
+
+  let overlay = document.createElement('div');
+  overlay.id = 'lightbox-overlay';
+  overlay.innerHTML = `
+    <button id="lightbox-close" aria-label="Close">✕</button>
+    <button id="lightbox-prev" aria-label="Previous">‹</button>
+    <img id="lightbox-img" src="" alt="">
+    <button id="lightbox-next" aria-label="Next">›</button>
+    <div id="lightbox-caption"></div>`;
+  document.body.appendChild(overlay);
+
+  const lightboxImg     = overlay.querySelector('#lightbox-img');
+  const lightboxCaption = overlay.querySelector('#lightbox-caption');
+  let currentIndex = 0;
+  let images = [];
+
+  function refreshImages() {
+    images = Array.from(document.querySelectorAll('table td img'))
+      .filter(img => img.closest('td').style.display !== 'none');
+  }
+
+  function openLightbox(index) {
+    refreshImages();
+    if (!images.length) return;
+    currentIndex = index;
+    showImage();
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function showImage() {
+    const img = images[currentIndex];
+    if (!img) return;
+    lightboxImg.src = img.src;
+    lightboxImg.alt = img.alt;
+    const name = img.closest('td')?.querySelector('b')?.innerText || img.alt;
+    lightboxCaption.textContent = name;
+  }
+
+  function closeLightbox() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function showNext() {
+    refreshImages();
+    if (!images.length) return;
+    currentIndex = (currentIndex + 1) % images.length;
+    showImage();
+  }
+
+  function showPrev() {
+    refreshImages();
+    if (!images.length) return;
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    showImage();
+  }
+
+  /* Wire clicks on product images */
+  function wireImages() {
+    refreshImages();
+    images.forEach((img, i) => {
+      img.style.cursor = 'zoom-in';
+      img.onclick = () => openLightbox(i);
+    });
+  }
+  wireImages();
+
+  /* Re-wire after category filtering / search changes visible images */
+  const observer = new MutationObserver(() => wireImages());
+  const table = document.querySelector('table');
+  if (table) observer.observe(table.parentElement || document.body, { attributes: true, subtree: true, attributeFilter: ['style'] });
+
+  overlay.querySelector('#lightbox-close').addEventListener('click', closeLightbox);
+  overlay.querySelector('#lightbox-next').addEventListener('click', showNext);
+  overlay.querySelector('#lightbox-prev').addEventListener('click', showPrev);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeLightbox(); });
+
+  document.addEventListener('keydown', e => {
+    if (!overlay.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') showNext();
+    if (e.key === 'ArrowLeft') showPrev();
+  });
+}
+
+/* =========================================
    INIT
    ========================================= */
 document.addEventListener('DOMContentLoaded', () => {
-  initHamburger();       /* hamburger on ALL pages */
-  initSearch();          /* search only on home, about, products */
-  initCategoryTabs();    /* category tabs only on products */
-  createBubble();        /* cart bubble on all pages */
-  wireCartButtons();     /* cart buttons on products */
-  initContactForm();     /* contact form only if form exists */
-  updateBubble();        /* sync cart count */
+  initHamburger();         /* hamburger on ALL pages, with Products sub-menu */
+  initSearch();             /* search only on home, about, products */
+  initCategoryTabs();       /* category tabs only on products */
+  initDeliveryMap();        /* interactive SA delivery map on home & about */
+  initGalleryLightbox();    /* image lightbox on products */
+  createBubble();           /* cart bubble on all pages */
+  wireCartButtons();        /* cart buttons on products */
+  initContactForm();        /* contact form only if form exists */
+  updateBubble();           /* sync cart count */
 });
